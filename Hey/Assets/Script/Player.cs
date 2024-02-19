@@ -1,19 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
+    // Variable concernant les mouvements du joueurs
     private Rigidbody2D rb2D;
     [SerializeField]
     private float speed = 3;
     [SerializeField]
     private float sprint;
 
+    //Variables concernant les points de vie du joueur
+    public int maxHealth = 100;
+    public int currentHealth;
+
+    public HealthBar healthBar;
+
     // Start is called before the first frame update
     void Start()
     {
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
         rb2D = GetComponent<Rigidbody2D>();
     }
 
@@ -21,6 +28,12 @@ public class Player : MonoBehaviour
     void Update()
     {
         PlayerMovement();
+
+        // TODO a supprimer une fois la création d'un système de dégat, juste la a titre de test
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            TakeDamage(20);
+        }
     }
 
 
@@ -45,6 +58,12 @@ public class Player : MonoBehaviour
         {
             rb2D.MovePosition(rb2D.position + dashVelocity * Time.fixedDeltaTime);
         }
+    }
+
+    void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
     }
 
 }
